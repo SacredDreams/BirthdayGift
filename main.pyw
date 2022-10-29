@@ -16,16 +16,16 @@ class main:
         self.condition = 15                                                         # 设置需要点击“打开”按钮的次数
         self.state = False                                                          # 为False时，不更换pushButton_3的链接
         self.url = "https://github.com/SacredDreams/BirthdayGift"                   # 项目地址
-        self.logs_time = time.strftime("%Y%m%d_%H%M%S", time.localtime())            # 获取日志文件的名称信息
-        self.logs_list = []                                                          # 日志信息列表
-        self.main_ui = QUiLoader().load("ui\\main.ui")                              # 加载主页面
+        self.logs_time = time.strftime("%Y%m%d_%H%M%S", time.localtime())           # 获取日志文件的名称信息
+        self.logs_list = []                                                         # 日志信息列表
+        self.main_ui = QUiLoader().load("resources\\ui\\main.ui")                              # 加载主页面
         self.main_ui.pushButton.clicked.connect(self.turn_to_page_2)                # “开始”按钮，链接第二页
         self.main_ui.pushButton_2.clicked.connect(self.help)                        # “帮助”按钮，启动帮助窗口
         self.main_ui.pushButton_8.clicked.connect(self.turn_to_page_1)              # “上一页”按钮，切换至第一页
         self.main_ui.pushButton_8.setEnabled(False)                                 # “上一页”按钮，禁用
         self.build_connects()                                                       # 与“操作页面”的scrollArea的所有按钮建立连接
 
-        with open("data\\ClickTimes", "r") as file:                                 # 从ClickTimes文件中读出需要点击“打开”按钮的次数
+        with open("resources\\ClickTimes", "r") as file:                                 # 从ClickTimes文件中读出需要点击“打开”按钮的次数
             self.condition = int(file.readlines()[0])
 
         with open("logs\\%s" % self.logs_time, "a") as file:                         # 创建并写入日志
@@ -37,7 +37,7 @@ class main:
         """
         帮助页面的窗口
         """
-        self.help_ui = QUiLoader().load("ui\\help.ui")
+        self.help_ui = QUiLoader().load("resources\\ui\\help.ui")
         self.help_ui.show()
         with open("logs\\%s" % self.logs_time, "a") as file:                                          # 写入日志
             file.write("\n[%s] Loaded help window..." % time.strftime("%H:%M:%S", time.localtime()))  # 已加载主窗口
@@ -53,7 +53,7 @@ class main:
         """
         生日贺卡页面
         """
-        self.birthday_ui = QUiLoader().load("ui\\birthday.ui")
+        self.birthday_ui = QUiLoader().load("resources\\ui\\birthday.ui")
         self.birthday_ui.show()
         with open("logs\\%s" % self.logs_time, "a") as file:        # 写入日志
             file.write(
