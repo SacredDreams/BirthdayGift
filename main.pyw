@@ -6,7 +6,7 @@ import time
 class main:
     def __init__(self):
         """
-        设置初始值和属性，声明变量
+        设置初始值、属性、变量
         """
         self.main_ui = None                                                         # 主窗口
         self.help_ui = None                                                         # 帮助窗口
@@ -17,18 +17,18 @@ class main:
         self.state = False                                                          # 为False时，不更换pushButton_3的链接
         self.url = "https://github.com/SacredDreams/BirthdayGift"                   # 项目地址
         self.logs_time = time.strftime("%Y%m%d_%H%M%S", time.localtime())           # 获取日志文件的名称信息
-        self.logs_list = []                                                         # 日志信息列表
-        self.main_ui = QUiLoader().load("resources\\ui\\main.ui")                              # 加载主页面
+        self.logs_output_list = []                                                  # help页面中读取本地日志信息生成的列表
+        self.main_ui = QUiLoader().load("resources\\ui\\main.ui")                   # 加载主页面
         self.main_ui.pushButton.clicked.connect(self.turn_to_page_2)                # “开始”按钮，链接第二页
         self.main_ui.pushButton_2.clicked.connect(self.help)                        # “帮助”按钮，启动帮助窗口
         self.main_ui.pushButton_8.clicked.connect(self.turn_to_page_1)              # “上一页”按钮，切换至第一页
         self.main_ui.pushButton_8.setEnabled(False)                                 # “上一页”按钮，禁用
         self.build_connects()                                                       # 与“操作页面”的scrollArea的所有按钮建立连接
 
-        with open("resources\\ClickTimes", "r") as file:                                 # 从ClickTimes文件中读出需要点击“打开”按钮的次数
+        with open("resources\\ClickTimes", "r") as file:                            # 从ClickTimes文件中读出需要点击“打开”按钮的次数
             self.condition = int(file.readlines()[0])
 
-        with open("logs\\%s" % self.logs_time, "a") as file:                         # 创建并写入日志
+        with open("logs\\%s" % self.logs_time, "a") as file:                        # 创建并写入日志
             file.write("[%s] Start running..." % time.strftime("%H:%M:%S", time.localtime()))         # 程序开始执行
             file.write("\n[%s] Building connects..." % time.strftime("%H:%M:%S", time.localtime()))   # 连接PushButtons
             file.write("\n[%s] Loaded main window..." % time.strftime("%H:%M:%S", time.localtime()))  # 已加载主窗口
@@ -42,8 +42,8 @@ class main:
         with open("logs\\%s" % self.logs_time, "a") as file:                                          # 写入日志
             file.write("\n[%s] Loaded help window..." % time.strftime("%H:%M:%S", time.localtime()))  # 已加载主窗口
         with open("logs\\%s" % self.logs_time, "r") as file:                        # 读取日志
-            self.logs_list = file.readlines()                                       # 存入日志列表
-            for i in self.logs_list:
+            self.logs_output_list = file.readlines()                                       # 存入日志列表
+            for i in self.logs_output_list:
                 self.help_ui.textEdit.append(i.replace("\n", ""))                   # 输出日志
         self.help_ui.pushButton.clicked.connect(self.tip)                           # “获取更多信息”按钮，其实是提示
         self.help_ui.pushButton_2.clicked.connect(self.open_url)                    # “打开项目地址”按钮，浏览器中打开
