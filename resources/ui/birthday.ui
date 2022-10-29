@@ -25,6 +25,11 @@
   <property name="windowTitle">
    <string>BirthdayGift</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#Form{
+	background-image:url(&quot;resources/images/Image.png&quot;)
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout"/>
  </widget>
  <resources/>
