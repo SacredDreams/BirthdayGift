@@ -1,5 +1,7 @@
 from PySide2.QtWidgets import *
 from PySide2.QtUiTools import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
 import webbrowser
 import time
 
@@ -11,7 +13,7 @@ class main:
         self.main_ui = None                                                         # 主窗口
         self.help_ui = None                                                         # 帮助窗口
         self.birthday_ui = None                                                     # 生日图片窗口
-        self.result = None                                                          # 确认是否结束进程的结果
+        self.result = None                                                           # 确认是否结束进程的结果
         self.count = 0                                                              # 点击“打开”按钮累计的次数
         self.condition = 15                                                         # 设置需要点击“打开”按钮的次数
         self.state = False                                                          # 为False时，不更换pushButton_3的链接
@@ -24,6 +26,22 @@ class main:
         self.main_ui.pushButton_8.clicked.connect(self.turn_to_page_1)              # “上一页”按钮，切换至第一页
         self.main_ui.pushButton_8.setEnabled(False)                                 # “上一页”按钮，禁用
         self.build_connects()                                                       # 与“操作页面”的scrollArea的所有按钮建立连接
+
+        # 绘制窗口弧角（main_ui）
+        self.bmp = QBitmap(900, 600)
+        self.bmp.fill()
+        self.Painter = QPainter(self.bmp)
+        self.Painter.setPen(Qt.NoPen)
+        self.Painter.setBrush(Qt.black)
+        self.Painter.drawRoundedRect(self.bmp.rect(), 10, 10)
+        self.main_ui.setMask(self.bmp)
+
+        # 绘制窗口阴影（main_ui）
+        self.shadow = QGraphicsDropShadowEffect()
+        self.shadow.setOffset(10, 10)         # 设置偏移量
+        self.shadow.setBlurRadius(20)       # 设置阴影半径
+        self.shadow.setColor(Qt.black)       # 设置阴影颜色
+        self.main_ui.setGraphicsEffect(self.shadow)
 
         with open("resources\\ClickTimes", "r") as file:                            # 从ClickTimes文件中读出需要点击“打开”按钮的次数
             self.condition = int(file.readlines()[0])
@@ -55,6 +73,9 @@ class main:
         """
         self.birthday_ui = QUiLoader().load("resources\\ui\\birthday.ui")
         self.birthday_ui.show()
+        # 绘制窗口弧角（birthday_ui）
+        self.birthday_ui.setMask(self.bmp)
+
         with open("logs\\%s" % self.logs_time, "a") as file:        # 写入日志
             file.write(
                 "\n[%s] Loaded birthday window..."
@@ -130,6 +151,10 @@ class main:
 
             self.main_ui.close()
             self.help_ui.close()
+            try:
+                self.birthday_ui.close()
+            except AttributeError:
+                pass
 
     def open_url(self):
         """
@@ -147,7 +172,6 @@ class main:
             )
         except AttributeError:
             pass
-
 
     def tip(self):
         """
